@@ -1,0 +1,63 @@
+{
+  "heart_disease": {
+    "description": "Predicts cardiovascular disease risk",
+    "model_file":
+     "data/models/trained/heart_xgboost.pkl",
+    "canonical_features": [
+      "age",
+      "sex",
+      "chest pain type",
+      "resting blood pressure",
+      "serum cholesterol",
+      "fasting blood sugar",
+      "resting electrocardiogram",
+      "maximum heart rate achieved",
+      "exercise induced angina",
+      "st depression induced by exercise",
+      "slope of peak exercise st segment",
+      "number of major vessels",
+      "thalassemia",
+      "heart disease diagnosis"
+    ]
+  },
+
+  "diabetes": {
+    "description": "Predicts diabetes risk",
+    "model_file":
+     "data/models/trained/diabetes_xgboost.pkl",
+    "canonical_features": [
+      "number of pregnancies",
+      "plasma glucose concentration",
+      "blood pressure",
+      "skin thickness",
+      "serum insulin",
+      "body mass index",
+      "diabetes pedigree function",
+      "diabetes diagnosis",
+      "age"
+    ]
+  },
+
+  "palliative_care": {
+    "description": "Predicts anxiety risk in palliative care patients",
+
+    "canonical_features": [
+      "patient age",
+      "gender",
+      "ecog performance score",
+      "living situation",
+      "pain severity score",
+      "nausea severity score",
+      "dyspnea severity score",
+      "appetite loss score",
+      "fatigue severity score",
+      "assistance with daily living",
+      "organizational care problems",
+      "sedative medication",
+      "antidepressant medication",
+      "antihypertensive medication",
+      "laxative medication",
+      "anxiety level"
+    ]
+  }
+}

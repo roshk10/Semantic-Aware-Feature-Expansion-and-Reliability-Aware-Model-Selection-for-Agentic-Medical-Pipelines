@@ -1,0 +1,33 @@
+{
+  "trestbps": "resting blood pressure",
+  "fbs": "fasting blood sugar",
+  "chol": "serum cholesterol",
+  "restecg": "resting electrocardiogram",
+  "thalach": "maximum heart rate achieved",
+  "cp": "chest pain type",
+  "exang": "exercise induced angina",
+  "oldpeak": "st depression induced by exercise",
+  "ca": "number of major vessels",
+  "thal": "thalassemia",
+
+  "ecog_sc": "ecog performance score",
+  "dysp_sc": "dyspnea severity score",
+  "pain_sc": "pain severity score",
+  "naus_sc": "nausea severity score",
+  "anx_lvl": "anxiety level",
+  "pt_age": "patient age",
+
+  "diabetespedigreefunction": "diabetes pedigree function",
+  "skinthickness": "skin thickness",
+  "bloodpressure": "blood pressure",
+  "pregnancies": "number of pregnancies",
+  "glucose": "plasma glucose concentration",
+  "insulin": "serum insulin",
+  "bmi": "body mass index",
+  "outcome": "diabetes diagnosis",
+
+  "target": "heart disease diagnosis",
+  "age": "age",
+  "sex": "sex",
+  "slope": "slope of peak exercise st segment"
+}

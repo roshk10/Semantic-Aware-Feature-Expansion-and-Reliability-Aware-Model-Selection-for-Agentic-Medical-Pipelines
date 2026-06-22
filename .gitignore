@@ -1,0 +1,13 @@
+venv/
+
+__pycache__/
+*.pyc
+
+logs/reliability_memory.json
+
+data/models/*.pkl
+
+.vscode/
+.idea/
+
+.DS_Store
