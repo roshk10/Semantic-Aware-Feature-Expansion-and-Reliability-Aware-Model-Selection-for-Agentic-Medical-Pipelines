@@ -18,7 +18,8 @@
       "number of major vessels",
       "thalassemia",
       "heart disease diagnosis"
-    ]
+    ],
+    "domain": "cardiology"
   },
 
   "diabetes": {
@@ -35,7 +36,8 @@
       "diabetes pedigree function",
       "diabetes diagnosis",
       "age"
-    ]
+    ],
+    "domain": "endocrinology"
   },
 
   "palliative_care": {
@@ -58,6 +60,7 @@
       "antihypertensive medication",
       "laxative medication",
       "anxiety level"
-    ]
+    ],
+    "domain": "palliative"
   }
 }

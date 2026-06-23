@@ -12,6 +12,39 @@ def run(matcher_output):
     print(
         "\n[Agent 4] Starting Inference Agent"
     )
+    if matcher_output.get(
+    "status"
+    ) == "conflict":
+
+       print(
+        "[Agent 4] "
+        "Inference blocked "
+        "due to domain conflict."
+    )
+
+       return {
+
+        "status":
+            "skipped",
+
+        "reason":
+            "domain_conflict",
+
+        "selected_model":
+            None,
+
+        "predictions":
+            [],
+
+        "probabilities":
+            [],
+
+        "row_count":
+            0,
+
+        "error_message":
+            "Domain conflict detected."
+    }
 
     if matcher_output["status"] != "ok":
 
