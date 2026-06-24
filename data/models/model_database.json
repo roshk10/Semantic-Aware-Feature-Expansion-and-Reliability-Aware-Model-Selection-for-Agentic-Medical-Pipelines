@@ -1,8 +1,7 @@
 {
   "heart_disease": {
     "description": "Predicts cardiovascular disease risk",
-    "model_file":
-     "data/models/trained/heart_xgboost.pkl",
+    "model_file": "data/models/trained/heart_xgboost.pkl",
     "canonical_features": [
       "age",
       "sex",
@@ -21,11 +20,9 @@
     ],
     "domain": "cardiology"
   },
-
   "diabetes": {
     "description": "Predicts diabetes risk",
-    "model_file":
-     "data/models/trained/diabetes_xgboost.pkl",
+    "model_file": "data/models/trained/diabetes_xgboost.pkl",
     "canonical_features": [
       "number of pregnancies",
       "plasma glucose concentration",
@@ -39,10 +36,8 @@
     ],
     "domain": "endocrinology"
   },
-
   "palliative_care": {
     "description": "Predicts anxiety risk in palliative care patients",
-
     "canonical_features": [
       "patient age",
       "gender",
@@ -62,5 +57,22 @@
       "anxiety level"
     ],
     "domain": "palliative"
+  },
+  "sepsis_predictor": {
+    "description": "Predicts sepsis risk from ICU patient measurements",
+    "domain": "critical_care",
+    "source": "github.com/example/sepsis-model",
+    "canonical_features": [
+      "heart rate",
+      "systolic blood pressure",
+      "temperature",
+      "respiratory rate",
+      "white blood cell count",
+      "age"
+    ],
+    "model_file": "data/models/trained/sepsis_xgboost.pkl",
+    "target_column": "sepsis_risk",
+    "registered_at": "2026-06-24T11:49:39.781859",
+    "registration_type": "external"
   }
 }
