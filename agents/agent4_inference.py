@@ -75,6 +75,65 @@ def _get_top_features(
         shap_summary.keys()
     )[:n]
 
+# ==========================================
+# V2.4 LOCAL SHAP
+# ==========================================
+
+def _run_local_shap(
+    model,
+    X,
+    row_index=0
+):
+
+    try:
+
+        explainer = shap.TreeExplainer(
+            model
+        )
+
+        shap_values = (
+            explainer.shap_values(X)
+        )
+
+        row_values = (
+            shap_values[row_index]
+        )
+
+        explanation = {}
+
+        for feature, value in zip(
+            X.columns,
+            row_values
+        ):
+
+            explanation[feature] = round(
+                float(value),
+                6
+            )
+
+        explanation = dict(
+
+            sorted(
+
+                explanation.items(),
+
+                key=lambda item:
+                    abs(item[1]),
+
+                reverse=True
+            )
+        )
+
+        return explanation
+
+    except Exception as e:
+
+        print(
+            f"[Agent 4] "
+            f"Local SHAP failed: {e}"
+        )
+
+        return {}
 def run(matcher_output):
 
     print(
@@ -115,6 +174,8 @@ def run(matcher_output):
         "shap_summary": {},
 
         "top_features": [],
+        "local_explanation":
+         {},
     }
 
     if matcher_output["status"] != "ok":
@@ -128,6 +189,9 @@ def run(matcher_output):
             "shap_summary": {},
 
             "top_features": [],
+            "local_explanation":
+              {},
+            
         }
     if not matcher_output["gate_passed"]:
 
@@ -143,6 +207,8 @@ def run(matcher_output):
             "shap_summary": {},
 
             "top_features": [],
+            "local_explanation":
+            {},
         }
 
     selected_model = (
@@ -192,6 +258,8 @@ def run(matcher_output):
             "shap_summary": {},
 
             "top_features": [],
+            "local_explanation":
+             {},
         }
 
     predictions = model.predict(X)
@@ -210,6 +278,37 @@ def run(matcher_output):
             X
         )
     )
+    local_explanation = (
+    _run_local_shap(
+        model,
+        X,
+        row_index=0
+    )
+    )
+    if local_explanation:
+
+        print(
+        "\n[Agent 4] "
+        "Local Explanation "
+        "(Row 0):"
+    )
+
+        count = 0
+
+        for feature, value in (
+        local_explanation.items()
+     ):
+
+             print(
+            f"   {feature}"
+            f" -> "
+            f"{value}"
+        )
+
+             count += 1
+
+             if count == 5:
+               break
 
     top_features = (
         _get_top_features(
@@ -260,5 +359,7 @@ def run(matcher_output):
 
         "top_features":
             top_features,
+        "local_explanation":
+           local_explanation,
     }
 

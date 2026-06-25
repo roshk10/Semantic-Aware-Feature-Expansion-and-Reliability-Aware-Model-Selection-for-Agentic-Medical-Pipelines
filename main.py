@@ -100,6 +100,30 @@ def print_final_report(
         )
 
     print("\nINFERENCE")
+    if a4_out.get(
+    "local_explanation"
+    ):
+
+        print(
+            "\nLOCAL EXPLANATION"
+        )
+
+        count = 0
+
+        for feature, value in (
+            a4_out[
+                "local_explanation"
+            ].items()
+        ):
+
+            print(
+                f"{feature}: {value}"
+            )
+
+            count += 1
+
+            if count == 5:
+                break
 
     if a4_out["status"] == "skipped":
 
