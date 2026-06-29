@@ -269,6 +269,8 @@ The proposed SAFE-MAP framework introduces:
 
 **Roshan Raguraman**
 
+**Karthik S**
+
 Summer Internship Project
 
 Department of Computer Science and Engineering
