@@ -146,10 +146,20 @@ def score_agent2(
 # --------------------------------------------------
 
 def score_agent3(
-        matcher_output
+    matcher_output
 ):
-
     warnings = []
+    if matcher_output.get(
+    "conflict_detected"
+    ):
+    
+       warnings.append(
+        "DOMAIN_CONFLICT"
+       )
+
+       return 0.0, warnings
+
+    
 
     if matcher_output[
         "status"
@@ -160,9 +170,11 @@ def score_agent3(
         ]
 
     score = matcher_output.get(
-        "match_score",
-        0.0
+    "match_score"
     )
+
+    if score is None:
+       score = 0.0
 
     if not matcher_output.get(
         "gate_passed"
@@ -306,8 +318,23 @@ def detect_failures(
 
         inference_output
 ):
-
     failures = []
+    if matcher_output.get(
+    "conflict_detected"
+):
+
+     failures.append(
+        "DOMAIN_CONFLICT"
+    )
+
+    
+    if inference_output.get(
+    "status"
+    ) == "skipped":
+
+      failures.append(
+        "INFERENCE_BLOCKED"
+    )
 
     if intake_output[
         "status"
@@ -348,12 +375,18 @@ def detect_failures(
             )
 
     if matcher_output[
-        "status"
+    "status"
     ] == "error":
 
         failures.append(
             "MATCHING_FAILURE"
         )
+
+    elif matcher_output.get(
+        "conflict_detected"
+    ):
+
+        pass
 
     elif not matcher_output[
         "gate_passed"
@@ -362,15 +395,6 @@ def detect_failures(
         failures.append(
             "LOW_CONFIDENCE_MATCH"
         )
-
-    if inference_output[
-        "status"
-    ] == "error":
-
-        failures.append(
-            "INFERENCE_FAILURE"
-        )
-
     return failures
 
 

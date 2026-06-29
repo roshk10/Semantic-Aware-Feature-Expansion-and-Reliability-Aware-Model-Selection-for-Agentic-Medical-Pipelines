@@ -2,6 +2,12 @@ import json
 import os
 import re
 
+from utils.sapbert import (
+    get_embedding,
+    cosine_similarity
+)
+
+
 DICTIONARY_PATH = "data/models/clinical_abbreviations.json"
 
 KNOWN_STANDARD_SHORT = {
@@ -16,7 +22,11 @@ KNOWN_STANDARD_SHORT = {
     "ca",
     "thal"
 }
+MODEL_DATABASE_PATH = (
+    "data/models/model_database.json"
+)
 
+SAPBERT_EXPANSION_THRESHOLD = 0.65
 
 def load_dictionary():
 
@@ -77,7 +87,80 @@ def expand_header(header, dictionary):
         "confidence": 0.0,
         "method": "unresolved"
     }
+def expand_with_sapbert(
+    header,
+    model_db
+):
 
+    all_features = []
+
+    for model_info in model_db.values():
+
+        all_features.extend(
+            model_info.get(
+                "canonical_features",
+                []
+            )
+        )
+
+    if len(all_features) == 0:
+
+        return {
+            "expanded": header,
+            "confidence": 0.0,
+            "method": "unresolved"
+        }
+
+    header_embedding = (
+        get_embedding(header)
+    )
+
+    best_feature = None
+
+    best_score = -1.0
+
+    for feature in all_features:
+
+        feature_embedding = (
+            get_embedding(feature)
+        )
+
+        score = cosine_similarity(
+            header_embedding,
+            feature_embedding
+        )
+
+        if score > best_score:
+
+            best_score = score
+
+            best_feature = feature
+
+    if best_score >= SAPBERT_EXPANSION_THRESHOLD:
+
+        return {
+
+            "expanded":
+                best_feature,
+
+            "confidence":
+                round(best_score, 4),
+
+            "method":
+                "sapbert"
+        }
+
+    return {
+
+        "expanded":
+            header,
+
+        "confidence":
+            round(best_score, 4),
+
+        "method":
+            "unresolved"
+    }
 
 def assess_header_style(details):
 
@@ -119,6 +202,18 @@ def run(intake_output):
     df = intake_output["dataframe"]
 
     dictionary = load_dictionary()
+    model_db = {}
+
+    if os.path.exists(
+        MODEL_DATABASE_PATH
+    ):
+
+       with open(
+           MODEL_DATABASE_PATH,
+           "r"
+        ) as f:
+
+            model_db = json.load(f)
 
     expanded_headers = []
 
@@ -135,8 +230,28 @@ def run(intake_output):
         result = expand_header(
             header,
             dictionary
-        )
+           )
 
+        if result["method"] == "unresolved":
+
+            print(
+            f"[Agent 2] "
+            f"'{header}' "
+            f"not found in dictionary."
+            )
+
+            result = expand_with_sapbert(
+                header,
+                model_db
+             )
+        print(
+            f"[Agent 2] "
+            f"{header}"
+            f" -> "
+            f"{result['expanded']} "
+            f"[{result['method']}, "
+            f"{result['confidence']}]"
+        )
         expanded_headers.append(
             result["expanded"]
         )

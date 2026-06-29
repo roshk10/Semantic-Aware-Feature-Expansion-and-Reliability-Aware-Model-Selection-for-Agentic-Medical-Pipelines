@@ -1,0 +1,16 @@
+{
+  "model_name": "sepsis_predictor",
+  "description": "Predicts sepsis risk from ICU patient measurements",
+  "domain": "critical_care",
+  "source": "github.com/example/sepsis-model",
+  "canonical_features": [
+    "heart rate",
+    "systolic blood pressure",
+    "temperature",
+    "respiratory rate",
+    "white blood cell count",
+    "age"
+  ],
+  "model_file": "data/models/trained/sepsis_xgboost.pkl",
+  "target_column": "sepsis_risk"
+}

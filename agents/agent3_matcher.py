@@ -4,7 +4,7 @@ import os
 MODEL_DATABASE_PATH = "data/models/model_database.json"
 
 CONFIDENCE_THRESHOLD = 0.60
-
+CONFLICT_THRESHOLD = 0.50
 
 def load_model_database():
 
@@ -112,6 +112,10 @@ def run(features_output):
 
             model_info["canonical_features"]
         )
+        print(
+            f"Matches for {model_name}: "
+            f"{matches}"
+        )
 
         ranking.append({
 
@@ -150,6 +154,125 @@ def run(features_output):
         reverse=True
     )
 
+    # ==========================================
+    # V2.1 DOMAIN CONFLICT DETECTION
+    # ==========================================
+    
+    CONFLICT_THRESHOLD = 0.50
+    passing_models = [
+
+        {
+            "model": r["model"],
+
+            "score": r["score"],
+
+            "domain":
+                model_db[r["model"]].get(
+                    "domain",
+                    "unknown"
+                )
+        }
+
+        for r in ranking
+
+        if r["score"] >= CONFLICT_THRESHOLD
+    ]
+
+    top_two = passing_models[:2]
+
+    top_domains = {
+
+        m["domain"]
+
+        for m in top_two
+    }
+
+    if len(top_two) == 2 and len(top_domains) == 2:
+
+        explanation = (
+
+            f"Dataset matches multiple "
+
+            f"clinical domains above "
+
+            f"threshold {CONFLICT_THRESHOLD }. "
+
+            +
+
+            ", ".join(
+
+                f"{m['model']} "
+
+                f"({m['domain']}, "
+
+                f"{m['score']})"
+
+                for m in top_two
+            )
+
+            +
+
+            ". Inference blocked."
+        )
+
+        print(
+            "\n[Agent 3] DOMAIN "
+            "CONFLICT DETECTED"
+        )
+
+        print(
+            f"[Agent 3] {explanation}"
+        )
+
+        return {
+
+            "status":
+                "conflict",
+
+            "selected_model":
+                None,
+
+            "match_score":
+                None,
+
+            "gate_passed":
+                False,
+
+            "conflict_detected":
+                True,
+
+            "conflicting_models":
+                [
+                    m["model"]
+                    for m in top_two
+                ],
+
+            "conflicting_domains":
+                list(top_domains),
+
+            "conflict_explanation":
+                explanation,
+
+            "ranking":
+                ranking,
+
+            "match_detail":
+                match_detail,
+
+            "expanded_headers":
+                expanded_headers,
+
+            "dataframe":
+                df,
+
+            "error_message":
+                None
+        }
+
+    # ==========================================
+    # END CONFLICT DETECTION
+    # ==========================================
+
     best = ranking[0]
 
     selected_model = best["model"]
@@ -186,7 +309,8 @@ def run(features_output):
 
     return {
 
-        "status": status,
+        "status":
+            status,
 
         "selected_model":
             selected_model,
@@ -196,6 +320,18 @@ def run(features_output):
 
         "gate_passed":
             gate_passed,
+
+        "conflict_detected":
+            False,
+
+        "conflicting_models":
+            [],
+
+        "conflicting_domains":
+            [],
+
+        "conflict_explanation":
+            None,
 
         "ranking":
             ranking,

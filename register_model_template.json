@@ -1,0 +1,13 @@
+{
+  "model_name": "your_model_name",
+  "description": "What this model predicts",
+  "domain": "clinical_domain",
+  "source": "github.com/username/repo or paper title",
+  "canonical_features": [
+    "feature one",
+    "feature two",
+    "feature three"
+  ],
+  "model_file": "data/models/trained/your_model.pkl",
+  "target_column": "target_column_name"
+}
